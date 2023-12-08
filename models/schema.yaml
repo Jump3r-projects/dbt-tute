@@ -1,0 +1,46 @@
+version: 2
+
+models:
+  - name: customers
+    description: '{{ doc("testing_documentation") }}'
+    columns:
+      - name: customer_id
+        tests:
+          - unique
+          - not_null
+  - name: stg_customers
+    description: base customer table with new col names
+    columns:
+      - name: customer_id
+        tests:
+          - unique
+          - not_null
+  - name: stg_orders
+    description: base order table with new col names
+    columns:
+      - name: order_id
+        tests:
+          - unique
+          - not_null
+      - name: status
+        tests:
+          - accepted_values:
+              values: ['placed', 'shipped', 'completed', 'return_pending', 'returned']
+      - name: customer_id
+        tests:
+          - not_null
+          - relationships:
+              to: ref('stg_customers')
+              field: customer_id
+  #testing monthly_orders 
+  - name: monthly_orders
+    columns:
+      - name: year_month
+        tests:
+          - not_null
+      - name: orders_placed
+        tests:
+          - not_null
+
+      
+      
